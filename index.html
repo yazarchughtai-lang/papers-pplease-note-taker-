@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arstotzka Records Bureau</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="crt-overlay"></div>
+  <div class="app-shell">
+    <header class="bureau-header">
+      <div>
+        <p class="overline">Ministry of Documentation</p>
+        <h1>Arstotzka Note Inspector</h1>
+      </div>
+      <div class="header-actions">
+        <button id="new-note">Issue New Dossier</button>
+        <button id="export-notes">Export Ledger</button>
+        <label class="file-input">Import Ledger <input id="import-notes" type="file" accept="application/json" /></label>
+      </div>
+    </header>
+
+    <main class="main-grid">
+      <aside class="control-panel panel">
+        <h2>Inspection Controls</h2>
+        <label>Search Records
+          <input id="search" placeholder="Name, details, tags..." />
+        </label>
+
+        <label>Status Filter
+          <select id="status-filter">
+            <option value="active">Active Records</option>
+            <option value="archived">Archived</option>
+            <option value="trash">Rejected</option>
+            <option value="all">All</option>
+          </select>
+        </label>
+
+        <label>Sort Order
+          <select id="sort-order">
+            <option value="updated">Last Updated</option>
+            <option value="created">Date Created</option>
+            <option value="title">Title</option>
+            <option value="priority">Priority</option>
+          </select>
+        </label>
+
+        <div class="segmented">
+          <button class="view-toggle active" data-view="board">Desk Board</button>
+          <button class="view-toggle" data-view="list">Registry List</button>
+        </div>
+
+        <section class="stats" id="stats"></section>
+        <button id="panic-mode" class="danger">Alarm Drill</button>
+      </aside>
+
+      <section class="desk panel">
+        <div id="notes-container" class="notes board-view"></div>
+      </section>
+
+      <section class="inspector panel">
+        <h2>Record Editor</h2>
+        <form id="note-form">
+          <input type="hidden" id="note-id" />
+
+          <label>Record Title
+            <input id="title" required maxlength="80" placeholder="Entry permit memo" />
+          </label>
+
+          <label>Classification
+            <select id="priority">
+              <option value="low">Routine</option>
+              <option value="medium">Watch</option>
+              <option value="high">Critical</option>
+            </select>
+          </label>
+
+          <label>Tags (comma-separated)
+            <input id="tags" placeholder="border, permit, warning" />
+          </label>
+
+          <label>Mode
+            <select id="mode">
+              <option value="text">Narrative Note</option>
+              <option value="checklist">Checklist</option>
+            </select>
+          </label>
+
+          <div id="text-editor-wrap">
+            <label>Details
+              <textarea id="content" rows="8" placeholder="Document every discrepancy..."></textarea>
+            </label>
+          </div>
+
+          <div id="checklist-wrap" class="hidden">
+            <div class="checklist-header">
+              <span>Checklist Items</span>
+              <button id="add-task" type="button">+ Add Item</button>
+            </div>
+            <div id="task-list"></div>
+          </div>
+
+          <label>Due Date
+            <input type="date" id="due-date" />
+          </label>
+
+          <div class="stamp-row">
+            <button type="button" id="stamp-approved" class="stamp approved">APPROVED</button>
+            <button type="button" id="stamp-denied" class="stamp denied">DENIED</button>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit">File Record</button>
+            <button type="button" id="duplicate-note">Duplicate</button>
+            <button type="button" id="pin-note">Pin/Unpin</button>
+            <button type="button" id="archive-note">Archive</button>
+            <button type="button" id="trash-note" class="danger">Reject</button>
+            <button type="button" id="restore-note" class="hidden">Restore</button>
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <template id="note-card-template">
+    <article class="note-card">
+      <div class="card-top">
+        <h3></h3>
+        <span class="chip priority"></span>
+      </div>
+      <p class="snippet"></p>
+      <div class="meta-row">
+        <span class="chip status"></span>
+        <span class="due"></span>
+      </div>
+      <div class="tags"></div>
+      <div class="progress-row"></div>
+    </article>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>
